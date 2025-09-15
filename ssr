@@ -1,0 +1,159 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *create(int n)
+{
+    struct node *head = NULL, *temp, *ptr;
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        temp = (struct node *)malloc(sizeof(struct node));
+        printf("Enter the element for node %d: ", i + 1);
+        scanf("%d", &(temp->data));
+        temp->next = NULL;
+
+        if (head == NULL)
+        {
+            head = temp;
+        }
+        else
+        {
+            ptr = head;
+            while (ptr->next != NULL)
+                ptr = ptr->next;
+            ptr->next = temp;
+        }
+    }
+    return head;
+}
+
+void display(struct node *head)
+{
+    struct node *ptr = head;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    printf("The linked list elements are: ");
+    while (ptr != NULL)
+    {
+        printf("%d -> ", ptr->data);
+        ptr = ptr->next;
+    }
+    printf("NULL\n");
+}
+
+void search(struct node *head)
+{
+    int key, pos = 1;
+    struct node *ptr = head;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    printf("Enter the element to search: ");
+    scanf("%d", &key);
+
+    while (ptr != NULL)
+    {
+        if (ptr->data == key)
+        {
+            printf("Element %d found at position %d\n", key, pos);
+            return;
+        }
+        ptr = ptr->next;
+        pos++;
+    }
+    printf("Element %d not found\n", key);
+}
+
+void sort(struct node *head)
+{
+    struct node *i, *j;
+    int temp;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    for (i = head; i != NULL; i = i->next)
+    {
+        for (j = i->next; j != NULL; j = j->next)
+        {
+            if (i->data > j->data)
+            {
+                temp = i->data;
+                i->data = j->data;
+                j->data = temp;
+            }
+        }
+    }
+    printf("List sorted successfully\n");
+}
+
+struct node *reverse(struct node *head)
+{
+    struct node *prev = NULL, *curr = head, *next = NULL;
+    while (curr != NULL)
+    {
+        next = curr->next;
+        curr->next = prev;
+        prev = curr;
+        curr = next;
+    }
+    head = prev;
+    printf("List reversed successfully\n");
+    return head;
+}
+
+int main()
+{
+    int choice, n;
+    struct node *head = NULL;
+
+    while (1)
+    {
+        printf("\nMenu:\n");
+        printf("1. Create linked list\n");
+        printf("2. Display\n");
+        printf("3. Search an element\n");
+        printf("4. Sort (Bubble Sort)\n");
+        printf("5. Reverse\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter the no. of nodes: ");
+            scanf("%d", &n);
+            head = create(n);
+            break;
+        case 2:
+            display(head);
+            break;
+        case 3:
+            search(head);
+            break;
+        case 4:
+            sort(head);
+            break;
+        case 5:
+            head = reverse(head);
+            break;
+        case 6:
+            return 0;
+        default:
+            printf("Wrong Choice\n");
+        }
+    }
+}
