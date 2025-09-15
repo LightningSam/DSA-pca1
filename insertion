@@ -1,0 +1,203 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *create(int n)
+{
+    struct node *head = NULL;
+    struct node *temp;
+    struct node *ptr;
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        temp = (struct node *)malloc(sizeof(struct node));
+        printf("Enter the element for node %d: ", i + 1);
+        scanf("%d", &(temp->data));
+        temp->next = NULL;
+
+        if (head == NULL)
+        {
+            head = temp;
+        }
+        else
+        {
+            ptr = head;
+            while (ptr->next != NULL)
+            {
+                ptr = ptr->next;
+            }
+            ptr->next = temp;
+        }
+    }
+    return head;
+}
+
+struct node *beg(struct node *head)
+{
+    struct node *newnode = (struct node *)malloc(sizeof(struct node));
+    printf("Enter the data for the new node: ");
+    scanf("%d", &(newnode->data));
+    newnode->next = head;
+    head = newnode;
+    return head;
+}
+
+struct node *end(struct node *head)
+{
+    struct node *endnode = (struct node *)malloc(sizeof(struct node));
+    struct node *ptr = head;
+    if (head == NULL)
+    {
+        printf("Error the list is empty\n");
+        return head;
+    }
+    printf("Enter the data for new node: ");
+    scanf("%d", &(endnode->data));
+    endnode->next = NULL;
+    while (ptr->next != NULL)
+    {
+        ptr = ptr->next;
+    }
+    ptr->next = endnode;
+    return head;
+}
+
+struct node *after(struct node *head)
+{
+    struct node *afternode = (struct node *)malloc(sizeof(struct node));
+    struct node *ptr = head;
+    int n;
+    if (head == NULL)
+    {
+        printf("Error the list is empty\n");
+        return head;
+    }
+    printf("Enter the element after which to add: ");
+    scanf("%d", &n);
+    while (ptr != NULL && ptr->data != n)
+    {
+        ptr = ptr->next;
+    }
+    if (ptr == NULL)
+    {
+        printf("Element not found in the list\n");
+        free(afternode);
+        return head;
+    }
+    printf("Enter the data for new node: ");
+    scanf("%d", &(afternode->data));
+    afternode->next = ptr->next;
+    ptr->next = afternode;
+    return head;
+}
+
+struct node *before(struct node *head)
+{
+    struct node *newnode = (struct node *)malloc(sizeof(struct node));
+    struct node *ptr = head;
+    struct node *prev = NULL;
+    int n;
+
+    if (newnode == NULL)
+    {
+        printf("Memory allocation failed\n");
+        return head;
+    }
+    if (head == NULL)
+    {
+        printf("Error list is empty\n");
+        return head;
+    }
+
+    printf("Enter the element before to add: ");
+    scanf("%d", &n);
+    if (head->data == n)
+    {
+        printf("Enter the data for new node: ");
+        scanf("%d", &(newnode->data));
+        newnode->next = head;
+        head = newnode;
+        return head;
+    }
+    while (ptr != NULL && ptr->data != n)
+    {
+        prev = ptr;
+        ptr = ptr->next;
+    }
+    if (ptr == NULL)
+    {
+        printf("Element not found\n");
+        free(newnode);
+        return head;
+    }
+    printf("Enter the data for new node: ");
+    scanf("%d", &(newnode->data));
+    prev->next = newnode;
+    newnode->next = ptr;
+    return head;
+}
+
+void display(struct node *head)
+{
+    struct node *ptr = head;
+    printf("The linked list elements are: \n");
+    while (ptr != NULL)
+    {
+        printf("%d->", (ptr->data));
+        ptr = ptr->next;
+    }
+    printf("NULL\n");
+}
+
+int main()
+{
+    int choice, n;
+    struct node *head = NULL;
+    while (1)
+    {
+        printf("\nMenu:\n");
+        printf("1. Create linked list\n");
+        printf("2. Display\n");
+        printf("3. Insert at the beginning\n");
+        printf("4. Insert at end\n");
+        printf("5. Insert after\n");
+        printf("6. Insert before\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter the no. of nodes: ");
+            scanf("%d", &n);
+            head = create(n);
+            break;
+        case 2:
+            display(head);
+            break;
+        case 3:
+            head = beg(head);
+            break;
+        case 4:
+            head = end(head);
+            break;
+        case 5:
+            head = after(head);
+            break;
+        case 6:
+            head = before(head);
+            break;
+        case 7:
+            return 0;
+        default:
+            printf("Wrong Choice\n");
+        }
+    }
+    return 0;
+}
