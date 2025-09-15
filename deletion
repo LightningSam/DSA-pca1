@@ -1,0 +1,174 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct node
+{
+    int data;
+    struct node *next;
+};
+
+struct node *create(int n)
+{
+    struct node *head = NULL, *temp, *ptr;
+    int i;
+    for (i = 0; i < n; i++)
+    {
+        temp = (struct node *)malloc(sizeof(struct node));
+        printf("Enter the element for node %d: ", i + 1);
+        scanf("%d", &(temp->data));
+        temp->next = NULL;
+
+        if (head == NULL)
+        {
+            head = temp;
+        }
+        else
+        {
+            ptr = head;
+            while (ptr->next != NULL)
+                ptr = ptr->next;
+            ptr->next = temp;
+        }
+    }
+    return head;
+}
+
+void display(struct node *head)
+{
+    struct node *ptr = head;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return;
+    }
+    printf("The linked list elements are: ");
+    while (ptr != NULL)
+    {
+        printf("%d -> ", ptr->data);
+        ptr = ptr->next;
+    }
+    printf("NULL\n");
+}
+
+struct node *delbeg(struct node *head)
+{
+    struct node *temp;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return head;
+    }
+    temp = head;
+    head = head->next;
+    printf("Deleted element: %d\n", temp->data);
+    free(temp);
+    return head;
+}
+
+struct node *delend(struct node *head)
+{
+    struct node *ptr = head, *prev = NULL;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return head;
+    }
+    if (head->next == NULL)
+    {
+        printf("Deleted element: %d\n", head->data);
+        free(head);
+        return NULL;
+    }
+    while (ptr->next != NULL)
+    {
+        prev = ptr;
+        ptr = ptr->next;
+    }
+    printf("Deleted element: %d\n", ptr->data);
+    free(ptr);
+    prev->next = NULL;
+    return head;
+}
+
+struct node *delspecific(struct node *head)
+{
+    struct node *ptr = head, *prev = NULL;
+    int key;
+    if (head == NULL)
+    {
+        printf("List is empty\n");
+        return head;
+    }
+    printf("Enter the element to delete: ");
+    scanf("%d", &key);
+
+    if (head->data == key)
+    {
+        struct node *temp = head;
+        head = head->next;
+        printf("Deleted element: %d\n", temp->data);
+        free(temp);
+        return head;
+    }
+
+    while (ptr != NULL && ptr->data != key)
+    {
+        prev = ptr;
+        ptr = ptr->next;
+    }
+
+    if (ptr == NULL)
+    {
+        printf("Element not found\n");
+        return head;
+    }
+
+    prev->next = ptr->next;
+    printf("Deleted element: %d\n", ptr->data);
+    free(ptr);
+    return head;
+}
+
+int main()
+{
+    int choice, n;
+    struct node *head = NULL;
+
+    while (1)
+    {
+        printf("\nMenu:\n");
+        printf("1. Create linked list\n");
+        printf("2. Display\n");
+        printf("3. Delete from beginning\n");
+        printf("4. Delete from end\n");
+        printf("5. Delete specific element\n");
+        printf("6. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter the no. of nodes: ");
+            scanf("%d", &n);
+            head = create(n);
+            break;
+        case 2:
+            display(head);
+            break;
+        case 3:
+            head = delbeg(head);
+            break;
+        case 4:
+            head = delend(head);
+            break;
+        case 5:
+            head = delspecific(head);
+            break;
+        case 6:
+            return 0;
+        default:
+            printf("Wrong Choice\n");
+        }
+    }
+}
